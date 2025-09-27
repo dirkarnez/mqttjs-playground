@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div id="container"></div>
+  <script type="module">
+    const div = document.getElementById("container");
+    const log = str => div.innerHTML += `${str}<br>`;
+    
+    import mqtt from "https://app.unpkg.com/mqtt@5.14.1/files/dist/mqtt.esm.js"
+    const client = mqtt.connect('mqtt://broker.hivemq.com');
+    
+    client.on('connect', function () {
+      log('已连接到 MQTT Broker');
+      
+      client.subscribe('test/topic', { qos: 1 }, function (err, granted) {
+        if (!err) {
+          log('已成功订阅');
+          
+          client.publish('test/topic', 'Hello MQTT', { qos: 1, retain: true }, function (err) {
+            if (!err) {
+              log('消息已发布');
+            }
+          });
+        }
+      });
+    });
+    
+    client.on('message', function (topic, message) {
+      log(`收到消息: ${message.toString()} 来自主题: ${topic}`);
+    });
+    
+    client.on('error', function (err) {
+      log(`Error ${err}`);
+    });
+    
+    client.end();
+  </script>
+</body>
+</html>
