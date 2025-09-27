@@ -10,7 +10,7 @@
     const div = document.getElementById("container");
     const log = str => div.innerHTML += `${str}<br>`;
     
-    import mqtt from "https://app.unpkg.com/mqtt@5.14.1/files/dist/mqtt.esm.js"
+    import mqtt from "https://unpkg.com/mqtt@5.14.1/dist/mqtt.esm.js"
     const client = mqtt.connect('mqtt://broker.hivemq.com');
     
     client.on('connect', function () {
