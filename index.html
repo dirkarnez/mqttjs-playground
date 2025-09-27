@@ -11,7 +11,7 @@
     const log = str => div.innerHTML += `${str}<br>`;
     
     import mqtt from "https://unpkg.com/mqtt@5.14.1/dist/mqtt.esm.js"
-    const client = mqtt.connect('mqtt://broker.hivemq.com');
+    const client = mqtt.connect('mqtts://broker.hivemq.com');
     
     client.on('connect', function () {
       log('已连接到 MQTT Broker');
