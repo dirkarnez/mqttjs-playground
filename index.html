@@ -10,17 +10,21 @@
     const div = document.getElementById("container");
     const log = str => div.innerHTML += `${str}<br>`;
     
-    import mqtt from "https://unpkg.com/mqtt@5.14.1/dist/mqtt.esm.js"
-    const client = mqtt.connect('mqtts://broker.hivemq.com');
+    import mqtt from "https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.14.1/mqtt.esm.min.js"
+    const client =  mqtt.connect("wss://broker.hivemq.com:8884/mqtt", {
+		clientId: 'my_unique_client_id_123',
+		clean: true, // Start a clean session
+		keepalive: 0
+	});
     
-    client.on('connect', function () {
+    client.on('connect', function (e) {
       log('已连接到 MQTT Broker');
       
       client.subscribe('test/topic', { qos: 1 }, function (err, granted) {
         if (!err) {
           log('已成功订阅');
           
-          client.publish('test/topic', 'Hello MQTT', { qos: 1, retain: true }, function (err) {
+          client.publish('/test/topic', 'Hello MQTT', { qos: 1, retain: true }, function (err) {
             if (!err) {
               log('消息已发布');
             }
@@ -37,7 +41,7 @@
       log(`Error ${err}`);
     });
     
-    client.end();
+    // client.end();
   </script>
 </body>
 </html>
